@@ -10,10 +10,11 @@
 using namespace std;
 
 //Constructs a Node
-RedBlackBinaryNode::RedBlackBinaryNode(int newData, bool isItBlack) {
+RedBlackBinaryNode::RedBlackBinaryNode(RedBlackBinaryNode* newParent, int newData, bool isItBlack) {
   data = newData;
   left = NULL;
   right = NULL;
+  parent = newParent;
   isBlack = isItBlack;
 }
 //Return left
@@ -23,6 +24,10 @@ RedBlackBinaryNode* RedBlackBinaryNode::getLeft() {
 //Return right
 RedBlackBinaryNode* RedBlackBinaryNode::getRight() {
   return right;
+}
+//Return parent
+RedBlackBinaryNode* RedBlackBinaryNode::getParent() {
+  return parent;
 }
 //Return data
 int RedBlackBinaryNode::getData() {
@@ -43,7 +48,19 @@ void RedBlackBinaryNode::setRight(RedBlackBinaryNode* newRight) {
 //Destructs the RedBlackBinaryNode
 RedBlackBinaryNode::~RedBlackBinaryNode() {
 }
-
+//Return grandparent
+RedBlackBinaryNode* RedBlackBinaryNode::grandparent() {
+  if (getParent() != NULL)
+	  return getParent()->getParent();
+  else return NULL;
+}
+//Return uncle
+RedBlackBinaryNode* RedBlackBinaryNode::uncle() {
+  RedBlackBinaryNode* gp = grandparent();
+  if (gp == NULL) return NULL;
+  else if (getParent() == gp->getLeft()) return gp->getRight();
+  else return gp->getLeft();
+}
 
 
 

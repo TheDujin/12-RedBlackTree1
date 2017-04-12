@@ -16,7 +16,7 @@ using namespace std;
 //Function prototypes
 void add(RedBlackBinaryNode* & root, int newNode);
 void print(RedBlackBinaryNode* root);
-void remove(RedBlackBinaryNode* & root, int target);
+//void remove(RedBlackBinaryNode* & root, int target);
 
 //TODO Make calls to constructor include the bool isItBlack
 
@@ -72,23 +72,23 @@ int main () {
 					cout << endl << "This is the binary search tree:" << endl;
 					print(root);
 					bool isFinished = false;
-					//While they haven't typed "c" (for continue), we ask them what they want to do with the tree
-					while (!isFinished) {
-					  cout << "Would you like to \"print\" the tree, \"delete\" a node from the tree, or \"continue\"?" << endl << "Input: ";
-					  cin >> choose;
-					  cin.ignore(256, '\n');
-					  if (choose == 'p' || choose == 'P') print(root);
-					  else if (choose == 'd' || choose == 'D') {
-						  int target;
-						  //Prompt for a target for deletion
-						  cout << "Please enter the value of the Node you want to delete." << endl << "Target: ";
-						  cin >> target;
-						  remove(root, target);
-
-					  }
-					  else if (choose == 'c' || choose == 'C') isFinished = true;
-					  else cout << "That input is invalid. Please try again." << endl;
-					}
+//					//While they haven't typed "c" (for continue), we ask them what they want to do with the tree
+//					while (!isFinished) {
+//					  cout << "Would you like to \"print\" the tree, \"delete\" a node from the tree, or \"continue\"?" << endl << "Input: ";
+//					  cin >> choose;
+//					  cin.ignore(256, '\n');
+//					  if (choose == 'p' || choose == 'P') print(root);
+//					  else if (choose == 'd' || choose == 'D') {
+//						  int target;
+//						  //Prompt for a target for deletion
+//						  cout << "Please enter the value of the Node you want to delete." << endl << "Target: ";
+//						  cin >> target;
+//						  remove(root, target);
+//
+//					  }
+//					  else if (choose == 'c' || choose == 'C') isFinished = true;
+//					  else cout << "That input is invalid. Please try again." << endl;
+//					}
 				}
 				//Close input
 				input.close();
@@ -124,21 +124,21 @@ int main () {
 			cout << endl << "This is the binary search tree:" << endl;
 			print(root);
 			bool isFinished = false;
-			while (!isFinished) {
-			  cout << "Would you like to \"print\" the tree, \"delete\" a node from the tree, or \"continue\"?" << endl << "Input: ";
-			  cin >> choose;
-			  cin.ignore(256, '\n');
-			  if (choose == 'p' || choose == 'P') print(root);
-			  else if (choose == 'd' || choose == 'D') {
-				  int target;
-				  cout << "Please enter the value of the Node you want to delete." << endl << "Target: ";
-				  cin >> target;
-				  remove(root, target);
-
-			  }
-			  else if (choose == 'c' || choose == 'C') isFinished = true;
-			  else cout << "That input is invalid. Please try again." << endl;
-			}
+//			while (!isFinished) {
+//			  cout << "Would you like to \"print\" the tree, \"delete\" a node from the tree, or \"continue\"?" << endl << "Input: ";
+//			  cin >> choose;
+//			  cin.ignore(256, '\n');
+//			  if (choose == 'p' || choose == 'P') print(root);
+//			  else if (choose == 'd' || choose == 'D') {
+//				  int target;
+//				  cout << "Please enter the value of the Node you want to delete." << endl << "Target: ";
+//				  cin >> target;
+//				  remove(root, target);
+//
+//			  }
+//			  else if (choose == 'c' || choose == 'C') isFinished = true;
+//			  else cout << "That input is invalid. Please try again." << endl;
+//			}
 
 		}
 		else if (choose == 'q' || choose == 'Q') {
@@ -155,14 +155,14 @@ void add(RedBlackBinaryNode* & root, int newNode) {
 	RedBlackBinaryNode* current = root;
 	//If tree is empty, root equals the new node
 	if (root == NULL)
-		root = new RedBlackBinaryNode(newNode, true);
+		root = new RedBlackBinaryNode(NULL, newNode, true);
 	else {
 		//Otherwise, shift left if node is equal to or less than current and shift right otherwise until the end of the tree is reached
 		bool hasAdded = false;
 		while (!hasAdded) {
 			if (newNode > current->getData()) {
 				if (current->getRight() == NULL) {
-					current->setRight(new RedBlackBinaryNode(newNode));
+					current->setRight(new RedBlackBinaryNode(current, newNode, false));
 					hasAdded = true;
 				}
 				else
@@ -170,13 +170,15 @@ void add(RedBlackBinaryNode* & root, int newNode) {
 			}
 			else {
 				if (current->getLeft() == NULL) {
-					current->setLeft(new RedBlackBinaryNode(newNode));
+					current->setLeft(new RedBlackBinaryNode(current, newNode, false));
 					hasAdded = true;
 				}
 				else
 					current = current->getLeft();
 			}
 		}
+		//TODO Walk through the cases and deal with them
+
 	}
 }
 //Prints the BST. Prints each node and its children
@@ -206,77 +208,77 @@ void print(RedBlackBinaryNode* root) {
 	}
 	else cout << "The tree is empty." << endl;
 }
-//Deletes the targeted node, if its exists.
-void remove(RedBlackBinaryNode* & root, int target) {
-	RedBlackBinaryNode* current = root;
-	RedBlackBinaryNode* parent = NULL;
-	bool targetIsLeftChild = false;
-	bool hasLeft = false;
-	bool hasRight = false;
-	//There are just a shit ton of conditions to check. We check all unique ones.
-	while (current->getData() != target) {
-		if (target > current->getData()) {
-			if (current->getRight() == NULL) {
-			  cout << "A node with value of \"" << target << "\" does not exist in the tree." << endl;
-				return;
-			}
-			else {
-				parent = current;
-				current = current->getRight();
-			}
-		}
-		else {
-			if (current->getLeft() == NULL) {
-			  cout << "A node with value of \"" << target << "\" does not exist in the tree." << endl;
-				return;
-			}
-			else {
-				parent = current;
-				current = current->getLeft();
-			}
-		}
-	}
-	cout << "A node with value of \"" << target << "\" was removed from the tree." << endl;
-	if (current->getLeft() != NULL) hasLeft = true;
-	if (current->getRight() != NULL) hasRight = true;
-	if (parent != NULL)
-		if (parent->getLeft() == current) targetIsLeftChild = true;
-	if (hasLeft) {
-		if (!hasRight) {
-			if (targetIsLeftChild && parent != NULL) parent->setLeft(current->getLeft());
-			else if (parent != NULL) parent->setRight(current->getLeft());
-			else root = current->getLeft();
-			delete current;
-		}
-		else {
-			RedBlackBinaryNode* rightmost = current->getLeft();
-			RedBlackBinaryNode* rightmostParent = current;
-			while (rightmost->getRight() != NULL){
-				rightmostParent = rightmost;
-				rightmost = rightmost->getRight();
-			}
-			if (targetIsLeftChild && parent != NULL) parent->setLeft(rightmost);
-			else if (parent!= NULL) parent->setRight(rightmost);
-			else root = rightmost;
-			if (rightmostParent != current) {
-				rightmostParent->setRight(rightmost->getLeft());
-				rightmost->setLeft(current->getLeft());
-			}
-			rightmost->setRight(current->getRight());
-			delete current;
-		}
-	}
-	else if (hasRight) {
-		if (targetIsLeftChild && parent != NULL) parent->setLeft(current->getRight());
-		else if (parent != NULL) parent->setRight(current->getRight());
-		else root = current->getRight();
-		delete current;
-	}
-	else {
-		if (targetIsLeftChild && parent != NULL) parent->setLeft(NULL);
-		else if (parent != NULL) parent->setRight(NULL);
-		else root = NULL;
-		delete current;
-	}
-
-}
+////Deletes the targeted node, if its exists.
+//void remove(RedBlackBinaryNode* & root, int target) {
+//	RedBlackBinaryNode* current = root;
+//	RedBlackBinaryNode* parent = NULL;
+//	bool targetIsLeftChild = false;
+//	bool hasLeft = false;
+//	bool hasRight = false;
+//	//There are just a shit ton of conditions to check. We check all unique ones.
+//	while (current->getData() != target) {
+//		if (target > current->getData()) {
+//			if (current->getRight() == NULL) {
+//			  cout << "A node with value of \"" << target << "\" does not exist in the tree." << endl;
+//				return;
+//			}
+//			else {
+//				parent = current;
+//				current = current->getRight();
+//			}
+//		}
+//		else {
+//			if (current->getLeft() == NULL) {
+//			  cout << "A node with value of \"" << target << "\" does not exist in the tree." << endl;
+//				return;
+//			}
+//			else {
+//				parent = current;
+//				current = current->getLeft();
+//			}
+//		}
+//	}
+//	cout << "A node with value of \"" << target << "\" was removed from the tree." << endl;
+//	if (current->getLeft() != NULL) hasLeft = true;
+//	if (current->getRight() != NULL) hasRight = true;
+//	if (parent != NULL)
+//		if (parent->getLeft() == current) targetIsLeftChild = true;
+//	if (hasLeft) {
+//		if (!hasRight) {
+//			if (targetIsLeftChild && parent != NULL) parent->setLeft(current->getLeft());
+//			else if (parent != NULL) parent->setRight(current->getLeft());
+//			else root = current->getLeft();
+//			delete current;
+//		}
+//		else {
+//			RedBlackBinaryNode* rightmost = current->getLeft();
+//			RedBlackBinaryNode* rightmostParent = current;
+//			while (rightmost->getRight() != NULL){
+//				rightmostParent = rightmost;
+//				rightmost = rightmost->getRight();
+//			}
+//			if (targetIsLeftChild && parent != NULL) parent->setLeft(rightmost);
+//			else if (parent!= NULL) parent->setRight(rightmost);
+//			else root = rightmost;
+//			if (rightmostParent != current) {
+//				rightmostParent->setRight(rightmost->getLeft());
+//				rightmost->setLeft(current->getLeft());
+//			}
+//			rightmost->setRight(current->getRight());
+//			delete current;
+//		}
+//	}
+//	else if (hasRight) {
+//		if (targetIsLeftChild && parent != NULL) parent->setLeft(current->getRight());
+//		else if (parent != NULL) parent->setRight(current->getRight());
+//		else root = current->getRight();
+//		delete current;
+//	}
+//	else {
+//		if (targetIsLeftChild && parent != NULL) parent->setLeft(NULL);
+//		else if (parent != NULL) parent->setRight(NULL);
+//		else root = NULL;
+//		delete current;
+//	}
+//
+//}

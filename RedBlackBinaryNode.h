@@ -51,19 +51,23 @@ using namespace std;
   **/
 class RedBlackBinaryNode {
  public:
-  RedBlackBinaryNode(int newData, bool isItBlack);
+  RedBlackBinaryNode(RedBlackBinaryNode* parent, int newData, bool isItBlack);
   RedBlackBinaryNode* getLeft();
   RedBlackBinaryNode* getRight();
+  RedBlackBinaryNode* getParent();
   int getData();
   bool getIsBlack();
   void setLeft(RedBlackBinaryNode* newLeft);
   void setRight(RedBlackBinaryNode* newRight);
+  RedBlackBinaryNode* grandparent();
+  RedBlackBinaryNode* uncle();
   ~RedBlackBinaryNode();
 
  private:
   int data;
   RedBlackBinaryNode* left;
   RedBlackBinaryNode* right;
+  RedBlackBinaryNode* parent;
   bool isBlack;
 };
 
