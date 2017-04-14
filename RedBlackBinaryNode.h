@@ -10,6 +10,7 @@
 
 #include <iostream>
 using namespace std;
+//TODO Rewrite this
 /** -- Class RedBlackBinaryNode --
   * The RedBlackBinaryNode object is a component that, in conjunction with other binary nodes,
   * can form binary trees.
@@ -59,6 +60,8 @@ class RedBlackBinaryNode {
   bool getIsBlack();
   void setLeft(RedBlackBinaryNode* newLeft);
   void setRight(RedBlackBinaryNode* newRight);
+  void setParent(RedBlackBinaryNode* newParent);
+  void setIsBlack(bool newIsBlack);
   RedBlackBinaryNode* grandparent();
   RedBlackBinaryNode* uncle();
   ~RedBlackBinaryNode();

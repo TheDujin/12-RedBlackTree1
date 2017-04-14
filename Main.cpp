@@ -17,6 +17,11 @@ using namespace std;
 void add(RedBlackBinaryNode* & root, int newNode);
 void print(RedBlackBinaryNode* root);
 //void remove(RedBlackBinaryNode* & root, int target);
+void case1(RedBlackBinaryNode* addedNode);
+void case2(RedBlackBinaryNode* addedNode);
+void case3(RedBlackBinaryNode* addedNode);
+void case4(RedBlackBinaryNode* addedNode);
+void case5(RedBlackBinaryNode* addedNode);
 
 //TODO Make calls to constructor include the bool isItBlack
 
@@ -153,6 +158,7 @@ int main () {
 //Add the node to the tree.
 void add(RedBlackBinaryNode* & root, int newNode) {
 	RedBlackBinaryNode* current = root;
+	RedBlackBinaryNode* addedNode;
 	//If tree is empty, root equals the new node
 	if (root == NULL)
 		root = new RedBlackBinaryNode(NULL, newNode, true);
@@ -163,6 +169,7 @@ void add(RedBlackBinaryNode* & root, int newNode) {
 			if (newNode > current->getData()) {
 				if (current->getRight() == NULL) {
 					current->setRight(new RedBlackBinaryNode(current, newNode, false));
+					addedNode = current->getRight();
 					hasAdded = true;
 				}
 				else
@@ -171,6 +178,7 @@ void add(RedBlackBinaryNode* & root, int newNode) {
 			else {
 				if (current->getLeft() == NULL) {
 					current->setLeft(new RedBlackBinaryNode(current, newNode, false));
+					addedNode = current->getLeft();
 					hasAdded = true;
 				}
 				else
@@ -178,6 +186,8 @@ void add(RedBlackBinaryNode* & root, int newNode) {
 			}
 		}
 		//TODO Walk through the cases and deal with them
+		case1(addedNode);
+
 
 	}
 }
@@ -282,3 +292,20 @@ void print(RedBlackBinaryNode* root) {
 //	}
 //
 //}
+
+void case1(RedBlackBinaryNode* addedNode) {
+	if (addedNode->getParent() == NULL) addedNode->setIsBlack(true);
+	else case2(addedNode);
+}
+void case2(RedBlackBinaryNode* addedNode) {
+
+}
+void case3(RedBlackBinaryNode* addedNode) {
+
+}
+void case4(RedBlackBinaryNode* addedNode) {
+
+}
+void case5(RedBlackBinaryNode* addedNode) {
+
+}

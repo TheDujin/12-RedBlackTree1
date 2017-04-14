@@ -45,6 +45,14 @@ void RedBlackBinaryNode::setLeft(RedBlackBinaryNode* newLeft) {
 void RedBlackBinaryNode::setRight(RedBlackBinaryNode* newRight) {
   right = newRight;
 }
+//Sets parent RedBlackBinaryNode
+void RedBlackBinaryNode::setParent(RedBlackBinaryNode* newParent) {
+	parent = newParent;
+}
+//Sets isBlack property
+void RedBlackBinaryNode::setIsBlack(bool newIsBlack) {
+	isBlack = newIsBlack;
+}
 //Destructs the RedBlackBinaryNode
 RedBlackBinaryNode::~RedBlackBinaryNode() {
 }
