@@ -23,7 +23,6 @@ void case3(RedBlackBinaryNode* addedNode);
 void case4(RedBlackBinaryNode* addedNode);
 void case5(RedBlackBinaryNode* addedNode);
 
-//TODO Make calls to constructor include the bool isItBlack
 
 //Main method which does pretty much everything
 int main () {
@@ -155,6 +154,7 @@ int main () {
 	}
 	return 0;
 }
+
 //Add the node to the tree.
 void add(RedBlackBinaryNode* & root, int newNode) {
 	RedBlackBinaryNode* current = root;
@@ -186,11 +186,12 @@ void add(RedBlackBinaryNode* & root, int newNode) {
 			}
 		}
 		//TODO Walk through the cases and deal with them
-		case1(addedNode);
+		//case1(addedNode);
 
 
 	}
 }
+
 //Prints the BST. Prints each node and its children
 void print(RedBlackBinaryNode* root) {
 	//The function is recursive
@@ -210,6 +211,8 @@ void print(RedBlackBinaryNode* root) {
 		}
 		else
 			cout << "Right child: None" << endl;
+		if (root->getIsBlack()) cout << "Color: Black" << endl;
+		else cout << "Color: Red" << endl;
 		cout << endl;
 		if (left)
 			print(root->getLeft());
@@ -297,15 +300,40 @@ void case1(RedBlackBinaryNode* addedNode) {
 	if (addedNode->getParent() == NULL) addedNode->setIsBlack(true);
 	else case2(addedNode);
 }
+
 void case2(RedBlackBinaryNode* addedNode) {
-
+	if (addedNode->getParent()->getIsBlack()) return;
+	else case3(addedNode);
 }
+
 void case3(RedBlackBinaryNode* addedNode) {
-
+	RedBlackBinaryNode* uncle = addedNode->uncle();
+	if (uncle != NULL && !uncle->getIsBlack()) {
+		addedNode->getParent()->setIsBlack(true);
+		uncle->setIsBlack(true);
+		addedNode->grandparent()->setIsBlack(false);
+		case1(addedNode->grandparent());
+	}
+	else case4(addedNode);
 }
+
 void case4(RedBlackBinaryNode* addedNode) {
-
+	RedBlackBinaryNode* grandparent = addedNode->grandparent();
+	if (addedNode == addedNode->getParent()->getRight() && addedNode->getParent() == grandparent->getLeft()) {
+		rotateLeft(addedNode->getParent());
+		addedNode = addedNode->getLeft();
+	}
+	else if (addedNode == addedNode->getParent()->getLeft() && addedNode->getParent() == grandparent->getRight()) {
+			rotateRight(addedNode->getParent());
+			addedNode = addedNode->getRight();
+	}
+	case5(addedNode);
 }
-void case5(RedBlackBinaryNode* addedNode) {
 
+void case5(RedBlackBinaryNode* addedNode) {
+	RedBlackBinaryNode* grandparent = addedNode->grandparent();
+	addedNode->getParent()->setIsBlack(true);
+	grandparent->setIsBlack(false);
+	if (addedNode == addedNode->getParent()->getLeft()) rotateRight(grandparent);
+	if (addedNode == addedNode->getParent()->getRight()) rotateLeft(grandparent);
 }
