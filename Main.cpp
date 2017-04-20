@@ -17,17 +17,19 @@ using namespace std;
 void add(RedBlackBinaryNode* & root, int newNode);
 void print(RedBlackBinaryNode* root);
 //void remove(RedBlackBinaryNode* & root, int target);
-void case1(RedBlackBinaryNode* addedNode);
-void case2(RedBlackBinaryNode* addedNode);
-void case3(RedBlackBinaryNode* addedNode);
-void case4(RedBlackBinaryNode* addedNode);
-void case5(RedBlackBinaryNode* addedNode);
+void case1(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root);
+void case2(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root);
+void case3(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root);
+void case4(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root);
+void case5(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root);
+void rotateLeft(RedBlackBinaryNode* target, RedBlackBinaryNode* & root);
+void rotateRight(RedBlackBinaryNode* target, RedBlackBinaryNode* & root);
 
 
 //Main method which does pretty much everything
 int main () {
 	//Checks for valid input ("file", "console", or "quit").
-	bool running = true;
+ 	bool running = true;
 	while (running) {
 		//Initializing an empty tree
 		RedBlackBinaryNode* root = NULL;
@@ -186,7 +188,7 @@ void add(RedBlackBinaryNode* & root, int newNode) {
 			}
 		}
 		//TODO Walk through the cases and deal with them
-		//case1(addedNode);
+		case1(addedNode, root);
 
 
 	}
@@ -296,44 +298,89 @@ void print(RedBlackBinaryNode* root) {
 //
 //}
 
-void case1(RedBlackBinaryNode* addedNode) {
+void case1(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	if (addedNode->getParent() == NULL) addedNode->setIsBlack(true);
-	else case2(addedNode);
+	else case2(addedNode, root);
 }
 
-void case2(RedBlackBinaryNode* addedNode) {
+void case2(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	if (addedNode->getParent()->getIsBlack()) return;
-	else case3(addedNode);
+	else case3(addedNode, root);
 }
 
-void case3(RedBlackBinaryNode* addedNode) {
+void case3(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	RedBlackBinaryNode* uncle = addedNode->uncle();
 	if (uncle != NULL && !uncle->getIsBlack()) {
 		addedNode->getParent()->setIsBlack(true);
 		uncle->setIsBlack(true);
 		addedNode->grandparent()->setIsBlack(false);
-		case1(addedNode->grandparent());
+		case1(addedNode->grandparent(), root);
 	}
-	else case4(addedNode);
+	else case4(addedNode, root);
 }
 
-void case4(RedBlackBinaryNode* addedNode) {
+void case4(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	RedBlackBinaryNode* grandparent = addedNode->grandparent();
 	if (addedNode == addedNode->getParent()->getRight() && addedNode->getParent() == grandparent->getLeft()) {
-		rotateLeft(addedNode->getParent());
+		rotateLeft(addedNode->getParent(), root);
 		addedNode = addedNode->getLeft();
 	}
 	else if (addedNode == addedNode->getParent()->getLeft() && addedNode->getParent() == grandparent->getRight()) {
-			rotateRight(addedNode->getParent());
+			rotateRight(addedNode->getParent(), root);
 			addedNode = addedNode->getRight();
 	}
-	case5(addedNode);
+	case5(addedNode, root);
 }
 
-void case5(RedBlackBinaryNode* addedNode) {
+void case5(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	RedBlackBinaryNode* grandparent = addedNode->grandparent();
 	addedNode->getParent()->setIsBlack(true);
 	grandparent->setIsBlack(false);
-	if (addedNode == addedNode->getParent()->getLeft()) rotateRight(grandparent);
-	if (addedNode == addedNode->getParent()->getRight()) rotateLeft(grandparent);
+	if (addedNode == addedNode->getParent()->getLeft()) rotateRight(grandparent, root);
+	if (addedNode == addedNode->getParent()->getRight()) rotateLeft(grandparent, root);
+}
+
+void rotateLeft(RedBlackBinaryNode* target, RedBlackBinaryNode* & root) {
+	RedBlackBinaryNode* tParent = target->getParent();
+	RedBlackBinaryNode* tSwitch = target->getRight();
+	RedBlackBinaryNode* tSChildLeft = target->getLeft();
+	if (tParent != NULL) {
+		tParent->setLeft(tSwitch);
+		tSwitch->setParent(tParent);
+		tSwitch->setLeft(target);
+		target->setParent(tSwitch);
+		target->setRight(tSChildLeft);
+		if (tSChildLeft != NULL) tSChildLeft->setParent(target);
+	}
+	else {
+		root = tSwitch;
+		tSwitch->setParent(NULL);
+		tSwitch->setLeft(target);
+		target->setParent(tSwitch);
+		target->setRight(tSChildLeft);
+		if (tSChildLeft != NULL) tSChildLeft->setParent(target);
+	}
+}
+
+
+void rotateRight(RedBlackBinaryNode* target, RedBlackBinaryNode* & root) {
+	RedBlackBinaryNode* tParent = target->getParent();
+		RedBlackBinaryNode* tSwitch = target->getLeft();
+		RedBlackBinaryNode* tSChildRight = target->getRight();
+		if (tParent != NULL) {
+			tParent->setRight(tSwitch);
+			tSwitch->setParent(tParent);
+			tSwitch->setRight(target);
+			target->setParent(tSwitch);
+			target->setLeft(tSChildRight);
+			if (tSChildRight != NULL) tSChildRight->setParent(target);
+		}
+		else {
+			root = tSwitch;
+			tSwitch->setParent(NULL);
+			tSwitch->setRight(target);
+			target->setParent(tSwitch);
+			target->setLeft(tSChildRight);
+			if (tSChildRight != NULL) tSChildRight->setParent(target);
+		}
 }
