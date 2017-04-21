@@ -53,9 +53,6 @@ void RedBlackBinaryNode::setParent(RedBlackBinaryNode* newParent) {
 void RedBlackBinaryNode::setIsBlack(bool newIsBlack) {
 	isBlack = newIsBlack;
 }
-//Destructs the RedBlackBinaryNode
-RedBlackBinaryNode::~RedBlackBinaryNode() {
-}
 //Return grandparent
 RedBlackBinaryNode* RedBlackBinaryNode::grandparent() {
   if (getParent() != NULL)
@@ -68,6 +65,9 @@ RedBlackBinaryNode* RedBlackBinaryNode::uncle() {
   if (gp == NULL) return NULL;
   else if (getParent() == gp->getLeft()) return gp->getRight();
   else return gp->getLeft();
+}
+//Destructs the RedBlackBinaryNode
+RedBlackBinaryNode::~RedBlackBinaryNode() {
 }
 
 

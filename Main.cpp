@@ -78,23 +78,23 @@ int main () {
 					cout << endl << "This is the binary search tree:" << endl;
 					print(root);
 					bool isFinished = false;
-//					//While they haven't typed "c" (for continue), we ask them what they want to do with the tree
-//					while (!isFinished) {
-//					  cout << "Would you like to \"print\" the tree, \"delete\" a node from the tree, or \"continue\"?" << endl << "Input: ";
-//					  cin >> choose;
-//					  cin.ignore(256, '\n');
-//					  if (choose == 'p' || choose == 'P') print(root);
-//					  else if (choose == 'd' || choose == 'D') {
-//						  int target;
-//						  //Prompt for a target for deletion
-//						  cout << "Please enter the value of the Node you want to delete." << endl << "Target: ";
-//						  cin >> target;
-//						  remove(root, target);
-//
-//					  }
-//					  else if (choose == 'c' || choose == 'C') isFinished = true;
-//					  else cout << "That input is invalid. Please try again." << endl;
-//					}
+					//While they haven't typed "c" (for continue), we ask them what they want to do with the tree
+					while (!isFinished) {
+					  cout << "Would you like to \"print\" the tree, \"add\" a node to the tree, or \"continue\"?" << endl << "Input: ";
+					  cin >> choose;
+					  cin.ignore(256, '\n');
+					  if (choose == 'p' || choose == 'P') print(root);
+					  else if (choose == 'a' || choose == 'A') {
+						  int target;
+						  //Prompt for a target for addition
+						  cout << "Please enter the value of the Node you want to add." << endl << "Target: ";
+						  cin >> target;
+						  add(root, target);
+
+					  }
+					  else if (choose == 'c' || choose == 'C') isFinished = true;
+					  else cout << "That input is invalid. Please try again." << endl;
+					}
 				}
 				//Close input
 				input.close();
@@ -130,21 +130,21 @@ int main () {
 			cout << endl << "This is the binary search tree:" << endl;
 			print(root);
 			bool isFinished = false;
-//			while (!isFinished) {
-//			  cout << "Would you like to \"print\" the tree, \"delete\" a node from the tree, or \"continue\"?" << endl << "Input: ";
-//			  cin >> choose;
-//			  cin.ignore(256, '\n');
-//			  if (choose == 'p' || choose == 'P') print(root);
-//			  else if (choose == 'd' || choose == 'D') {
-//				  int target;
-//				  cout << "Please enter the value of the Node you want to delete." << endl << "Target: ";
-//				  cin >> target;
-//				  remove(root, target);
-//
-//			  }
-//			  else if (choose == 'c' || choose == 'C') isFinished = true;
-//			  else cout << "That input is invalid. Please try again." << endl;
-//			}
+			while (!isFinished) {
+			  cout << "Would you like to \"print\" the tree, \"add\" a node from the tree, or \"continue\"?" << endl << "Input: ";
+			  cin >> choose;
+			  cin.ignore(256, '\n');
+			  if (choose == 'p' || choose == 'P') print(root);
+			  else if (choose == 'a' || choose == 'A') {
+				  int target;
+				  cout << "Please enter the value of the Node you want to add." << endl << "Target: ";
+				  cin >> target;
+				  add(root, target);
+
+			  }
+			  else if (choose == 'c' || choose == 'C') isFinished = true;
+			  else cout << "That input is invalid. Please try again." << endl;
+			}
 
 		}
 		else if (choose == 'q' || choose == 'Q') {
@@ -187,7 +187,7 @@ void add(RedBlackBinaryNode* & root, int newNode) {
 					current = current->getLeft();
 			}
 		}
-		//TODO Walk through the cases and deal with them
+		//Walk through the cases and deal with them
 		case1(addedNode, root);
 
 
@@ -298,16 +298,20 @@ void print(RedBlackBinaryNode* root) {
 //
 //}
 
+//Case 1 of insertion: The node is the root, so set it to black.
 void case1(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	if (addedNode->getParent() == NULL) addedNode->setIsBlack(true);
 	else case2(addedNode, root);
 }
 
+//Case 2 of insertion: The parent is black.
 void case2(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	if (addedNode->getParent()->getIsBlack()) return;
 	else case3(addedNode, root);
 }
 
+//Case 3 of insertion: Both the parent and uncle are red, so the parent/uncle are set to black and the grandparent is
+//set to red
 void case3(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	RedBlackBinaryNode* uncle = addedNode->uncle();
 	if (uncle != NULL && !uncle->getIsBlack()) {
@@ -319,6 +323,8 @@ void case3(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	else case4(addedNode, root);
 }
 
+//Case 4 of insertion: Uncle is NULL and node is either the left child of parent which is the right child grandparent
+//or vice versa. Perform the proper rotation so that they are both left-left or both right-right.
 void case4(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	RedBlackBinaryNode* grandparent = addedNode->grandparent();
 	if (addedNode == addedNode->getParent()->getRight() && addedNode->getParent() == grandparent->getLeft()) {
@@ -332,6 +338,8 @@ void case4(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	case5(addedNode, root);
 }
 
+//Case 5 of insertion: Both node and its parent are left-left or right-right. Perform the proper rotation
+//on grandparent and switch the colors of parent and grandparent. Now the tree is balanced for sure.
 void case5(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	RedBlackBinaryNode* grandparent = addedNode->grandparent();
 	addedNode->getParent()->setIsBlack(true);
@@ -340,12 +348,14 @@ void case5(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 	if (addedNode == addedNode->getParent()->getRight()) rotateLeft(grandparent, root);
 }
 
+//Rotate left. Target becomes the left child of its right child.
 void rotateLeft(RedBlackBinaryNode* target, RedBlackBinaryNode* & root) {
 	RedBlackBinaryNode* tParent = target->getParent();
 	RedBlackBinaryNode* tSwitch = target->getRight();
 	RedBlackBinaryNode* tSChildLeft = target->getLeft();
 	if (tParent != NULL) {
-		tParent->setLeft(tSwitch);
+		if (target == tParent->getLeft()) tParent->setLeft(tSwitch);
+		else tParent->setRight(tSwitch);
 		tSwitch->setParent(tParent);
 		tSwitch->setLeft(target);
 		target->setParent(tSwitch);
@@ -362,13 +372,14 @@ void rotateLeft(RedBlackBinaryNode* target, RedBlackBinaryNode* & root) {
 	}
 }
 
-
+//Rotate right. Target becomes the right child of its left child.
 void rotateRight(RedBlackBinaryNode* target, RedBlackBinaryNode* & root) {
 	RedBlackBinaryNode* tParent = target->getParent();
 		RedBlackBinaryNode* tSwitch = target->getLeft();
 		RedBlackBinaryNode* tSChildRight = target->getRight();
 		if (tParent != NULL) {
-			tParent->setRight(tSwitch);
+			if (target == tParent->getLeft()) tParent->setLeft(tSwitch);
+			else tParent->setRight(tSwitch);
 			tSwitch->setParent(tParent);
 			tSwitch->setRight(target);
 			target->setParent(tSwitch);
