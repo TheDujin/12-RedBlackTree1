@@ -352,7 +352,8 @@ void case5(RedBlackBinaryNode* addedNode, RedBlackBinaryNode* & root) {
 void rotateLeft(RedBlackBinaryNode* target, RedBlackBinaryNode* & root) {
 	RedBlackBinaryNode* tParent = target->getParent();
 	RedBlackBinaryNode* tSwitch = target->getRight();
-	RedBlackBinaryNode* tSChildLeft = target->getLeft();
+	//TODO Check if the issue is tSwitch->getLeft() instead of target->getLeft()
+	RedBlackBinaryNode* tSChildLeft = tSwitch->getLeft();
 	if (tParent != NULL) {
 		if (target == tParent->getLeft()) tParent->setLeft(tSwitch);
 		else tParent->setRight(tSwitch);
@@ -376,7 +377,8 @@ void rotateLeft(RedBlackBinaryNode* target, RedBlackBinaryNode* & root) {
 void rotateRight(RedBlackBinaryNode* target, RedBlackBinaryNode* & root) {
 	RedBlackBinaryNode* tParent = target->getParent();
 		RedBlackBinaryNode* tSwitch = target->getLeft();
-		RedBlackBinaryNode* tSChildRight = target->getRight();
+		//TODO Check if the issue is tSwitch->getRight() instead of target->getRight()
+		RedBlackBinaryNode* tSChildRight = tSwitch->getRight();
 		if (tParent != NULL) {
 			if (target == tParent->getLeft()) tParent->setLeft(tSwitch);
 			else tParent->setRight(tSwitch);
